@@ -1,0 +1,200 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static './bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static './fonts/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static './fonts/ionicons.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="{% static './css/header-1.css' %}">
+    <link rel="stylesheet" href="{% static './css/header-2.css' %}">
+    <link rel="stylesheet" href="{% static './css/header.css' %}">
+    <link rel="stylesheet" href="{% static './css/styles.css' %}">
+    <script src="{% static './js/jquery.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static './css/Article-List.css' %}">
+	<link rel="stylesheet" href="{% static './css/Footer-Basic.css' %}">
+	<link rel="stylesheet" href="{% static './css/ContainerTableau-by-ando.css' %}">
+</head>
+
+<body>
+    <nav class="navbar navbar-light navbar-expand-md navigation-clean" style="padding:0px;width: -webkit-fill-available;z-index:10;width: -moz-available;">
+        <div class="container"><img style="width: 4%;margin-left: -2%;height: 2%;" src="{% static './img/TV.jpg' %}">
+            <div><a class="navbar-brand" href="#">&nbsp; &nbsp; &nbsp; &nbsp;Vente de materiel informatique</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button></div>
+            <div
+                class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item monNav {% block class0 %}{% endblock%}" role="presentation" href="#" style="color: white;"><a class="nav-link active" href="administrateur" style="color: white;">Administrateur</a></li>
+                    <li class="nav-item dropdown"><a class="dropdown-toggle nav-link log" data-toggle="dropdown" aria-expanded="false" id="profil" style="color: white;padding: 9px;" href="#">{{ logged_user.nomClient }}<img style="width:30px;height:30px;padding:0;margin-left:5px;" src="{% static './img/olon.png' %}"></a>
+                        <div
+                            class="dropdown-menu" role="menu" id="menuProfil"><a class="dropdown-item" role="presentation" href="/logout">Logout <i class="fa fa-user-times" id="logouticon"></i></a></div>
+                     </li>
+                 </ul>
+            </div>
+        </div>
+    </nav>
+    <h3 style="text-align:center;margin-top:20px">Liste des materiels </h3>
+    <div class="container" id="containerTableau" style="margin-top:-70px">
+        <div class="col-md-12 search-table-col">
+            <button class="form-control" data-toggle="modal" data-target="#modalAjout" style="width: auto;float:left"><i class="icon ion-social-instagram"></i> Ajouter</button>
+            <div class="form-group pull-right col-lg-4"><input type="text" id="searchTxt" class="search form-control" placeholder="Search by typing here.."><button class="btn btn-primary" id="searchEn" type="button"><i class="icon ion-search"></i></button></div>
+                <span class="counter pull-right"></span>
+                <div class="table-responsive table-bordered table table-hover table-bordered results" id="tableStandard">
+                    <table class="table table-bordered table-hover">
+                        <thead class="bill-header cs">
+                            <tr>
+                                <th id="trs-hd">numero materiel&nbsp;</th>
+                                <th id="matricule">Design</th>
+                                <th id="matricule">Prix Unitaire</th>
+                                <th id="matricule">Stock</th>
+                                <th id="trs-hd">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="warning no-result">
+                                <td colspan="12"><i class="fa fa-warning"></i>&nbsp; No Result !!!</td>
+                            </tr>
+                            {% for materiel in materiels %}
+                            <tr>
+                                <td id="matriculeEn">{{ materiel.numMat }}</td>
+                                <td id="categorieEn">{{ materiel.design }}</td>
+                                <td id="emailEn">{{ materiel.Pu }}</td>
+                                <td id="emailEn">{{ materiel.Stock }}</td>
+                                <td><button class="btn btn-success" id="modifier"  onClick="javascript:modifierMateriel('{{ materiel.id}}','{{ materiel.numMat}}','{{ materiel.design}}','{{ materiel.Pu}}','{{ materiel.Stock}}');" style="margin-left: 5px;"  type="submit"><i class="fa fa-edit" style="font-size: 15px;"></i></button><button class="btn btn-danger"
+                                        id="SuppressionAchat" onClick="javascript:supprimerMateriel('{{ materiel.id}}');" style="margin-left: 5px;" type="submit"><i class="fa fa-trash" style="font-size: 15px;"></i></button></td>
+                            </tr>
+                            
+                            {% endfor %}
+                        </tbody>
+                    </table>
+        </div>
+    </div>
+				
+                        
+    <div class="modal fade" id="modalAjout" tabindex="-1" role="dialog" aria-labelledby="oMessagerieLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document" style="max-width: 500px;">
+      <form method="POST" action="/administrateur" enctype="multipart/form-data">
+            {% csrf_token %}
+			{% if error or ko %}
+			<p class="errornote" id="ko" style="color:red;text-align:center;font-size: 14px;
+    font-weight: 700;
+    display: block;
+    padding: 10px 12px;
+    margin: 0 0 10px 0;
+    color: #ba2121;
+    border: 1px solid #ba2121;
+    border-radius: 4px;
+    background-color: #fff;
+    background-position: 5px 12px;">{{ error }}{{ ko }}</p>
+			{% endif %}
+        <div class="modal-content">
+          <div class="modal-header" style="background:#8497AB">
+            <h5 class="modal-title" id="oMessagerieLabel" style="float:left;color: azure">Ajouter materiel</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+         
+          <div class="modal-body">
+              <div class="card-body">
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="numero" placeholder="Numero du materiel" required>
+                    </div>
+
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="design" placeholder="Design" required>
+                    </div>
+
+                    <div class="form-group">
+                      <input type="number" class="form-control" name="pu" placeholder="P.U" required>
+                    </div>
+                 
+                    <div class="form-group">
+                      <input type="number" class="form-control" name="stock" placeholder="Stock" required>
+                    </div>
+
+                    <div class="form-group">
+                      <input type="file" class="form-control" name="image" placeholder="Photo" >
+                    </div>
+            
+                </div>
+            </div>
+          <div class="modal-footer" style="background:#8497AB">
+            <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">annuler</button>
+            <button type="submit" name="ajoutMat" class="btn btn-primary" >enregistrer</button>
+          </div>
+        </div>
+        </form>
+      </div>
+  </div>
+
+
+   <div class="modal fade" id="modalModif" tabindex="-1" role="dialog" aria-labelledby="oMessagerieLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document" style="max-width: 500px;">
+      <form method="POST" action="">
+      
+        <div class="modal-content">
+          <div class="modal-header" style="background:##FFCE48">
+            <h5 class="modal-title" id="oMessagerieLabel" style="float:left;color: azure">Modifier materiel</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+         <form method="POST" action="/administrateur">
+            {% csrf_token %}
+			{% if error or ko %}
+			<p class="errornote" id="ko" style="color:red;text-align:center;font-size: 14px;
+    font-weight: 700;
+    display: block;
+    padding: 10px 12px;
+    margin: 0 0 10px 0;
+    color: #ba2121;
+    border: 1px solid #ba2121;
+    border-radius: 4px;
+    background-color: #fff;
+    background-position: 5px 12px;">{{ error }}{{ ko }}</p>
+			{% endif %}
+          <div class="modal-body">
+              <div class="card-body">
+                    <input type="hidden"  id="idEdit" name="id" >
+                    <div class="form-group">
+                      <input type="text" class="form-control" id="numMatEdit" name="numero" placeholder="Numero du materiel" required>
+                    </div>
+
+                    <div class="form-group">
+                      <input type="text" class="form-control"  id="designEdit" name="design" placeholder="Design" required>
+                    </div>
+
+                    <div class="form-group">
+                      <input type="number" class="form-control"  id="puEdit" name="pu" placeholder="P.U" required>
+                    </div>
+                 
+                    <div class="form-group">
+                      <input type="number" class="form-control"  id="stockEdit" name="stock" placeholder="Stock" required>
+                    </div>
+            
+                </div>
+            </div>
+          <div class="modal-footer" style="background:##FFCE48">
+            <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">annuler</button>
+            <button type="submit" name="modifMat" class="btn btn-primary" >Modifier</button>
+          </div>
+        </form>
+        </div>
+        </form>
+      </div>
+  </div>
+    
+    <script src="{% static './js/jquery.min.js' %}"></script>
+    <script src="{% static './js/fonction.js' %}"></script>
+    <script src="{% static './bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static './js/style.js' %}"></script>
+    <script src="{% static './js/ContainerTableau-by-ando-1.js' %}"></script>
+    <script src="{% static './js/ContainerTableau-by-ando-2.js' %}"></script>
+    <script src="{% static './js/ContainerTableau-by-ando.js' %}"></script>
+</body>
+
+</html>

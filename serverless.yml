@@ -1,0 +1,38 @@
+service: projet-django
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: dev
+  region: us-east-1
+
+plugins:
+  - serverless-wsgi
+  - serverless-python-requirements
+
+functions:
+  app:
+    handler: wsgi_handler.handler
+    timeout: 30
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}
+
+custom: 
+  wsgi:
+    app: ProjetVrai.wsgi.application
+    packRequirements: false
+  variables: ${file(./env.yml)}
+  
+package:
+  individually:
+    true
+  patterns:
+    - '!.env'
+    - '!.github/**'
+    - '!node_modules/**'
+    - '!.git/**'
+    - '!.serverless/**'
+    - 'static/**'
+    - '!.cache/**'
+    - '!.pytest_cache/**'
