@@ -132,7 +132,7 @@ DATABASES = {
     'NAME': 'projetDB',
     'USER': 'admin',
     'PASSWORD': '26787295',
-    'HOST': 'projet-database.c7uxnrcaqpy2.us-east-1.rds.amazonaws.com',
+    'HOST': 'projet-database.********.us-east-1.rds.amazonaws.com',
     'PORT': '3306',
   }
 }
@@ -195,10 +195,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 #TEMPLATES[0]['DIRS']=[os.path.join(BASE_DIR/"templates")]
-# AWS_KEY = "AKIAXTN5IVI7UAIPAXOH"
-# AWS_SECRET ="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"
-# AWS_ACCESS_KEY_ID="AKIAXTN5IVI72FU7AEVM"
-# AWS_SECRET_ACCESS_KEY="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"
+# AWS_KEY = "***"
+# AWS_SECRET ="*****"
+# AWS_ACCESS_KEY_ID="***"
+# AWS_SECRET_ACCESS_KEY="****"
 # AWS_STORAGE_BUCKET_NAME = "django-ml"
 # AWS_QUERYSTRING_AUTH = False
 # _AWS_EXPIRY = 60 * 60 * 24 * 7
