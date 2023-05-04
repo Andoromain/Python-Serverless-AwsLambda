@@ -131,7 +131,7 @@ DATABASES = {
     'ENGINE': 'django.db.backends.mysql',
     'NAME': 'projetDB',
     'USER': 'admin',
-    'PASSWORD': '26787295',
+    'PASSWORD': '******',
     'HOST': 'projet-database.********.us-east-1.rds.amazonaws.com',
     'PORT': '3306',
   }
